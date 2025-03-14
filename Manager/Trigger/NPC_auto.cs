@@ -1,12 +1,9 @@
-using UnityEngine;
-/// <summary>
-/// 触发NPC对话的触发器
-/// </summary>
-public class NPC_F : MyTrigger
+public class NPC_auto : MyTrigger
 {
     public PlotManager plotManager;
     public SuperController superController;
     public string NPC_id;
+    private bool hasTriggered = false;
     void Start()
     {
         superController = SuperController.Instance;
@@ -17,6 +14,14 @@ public class NPC_F : MyTrigger
         if (superController.isTalking == false)
         {
             plotManager.TriggerSend(NPC_id);
+        }
+    }
+    override public void Update()
+    {
+        if (!hasTriggered && touched && playerRigidbody != null && playerRigidbody.velocity.sqrMagnitude < 0.01f)
+        {
+            OnFKeyPressed();
+            hasTriggered = true;
         }
     }
 }

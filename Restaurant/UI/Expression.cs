@@ -4,7 +4,6 @@ public class Expression : MonoBehaviour
 {
     private HealthControl healthControl;
     private Animator animator;
-    private bool has_initialed = false;
     private float currentHealth = 0;
     // Start is called before the first frame update
     void Start()

@@ -1,0 +1,16 @@
+{
+    "name": "StaticTool",
+    "rootNamespace": "",
+    "references": [
+        "GUID:df5b6195b5e876c4a80258662d63ee57"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

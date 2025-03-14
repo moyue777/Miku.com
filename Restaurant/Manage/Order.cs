@@ -3,8 +3,9 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class Order : MonoBehaviour
+public partial class Order : MonoBehaviour
 {
+    public SuperController superController;
     public float ordertime;//生成的间隔
     public float duration = 30f;//总时间
     public List<float> move_time = new List<float> { 8.0f, 6.0f, 4.0f };//移动时间
@@ -16,52 +17,32 @@ public class Order : MonoBehaviour
     public TMP_Text show_time;//时间
     public TMP_Text money;//金钱
 
-    public Dictionary<string, List<string>> today_menu = new Dictionary<string, List<string>>();//本次营业菜单
-    public Dictionary<string, int> price = new Dictionary<string, int>();//价格
     public List<Vector3> spawnposes = new List<Vector3>(); // 指定生成位置
     public List<bool> spawned = new List<bool>();//生成位置当前是否有顾客
-
     private float timer;//生成计时器
-    private Dictionary<string, float> final_status = new Dictionary<string, float>();//存储玩家信息
+
+    private float today_income;
     private float timecalculater = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
+        superController = SuperController.Instance;
         //初始化
         DeactivateUI();
-        final_status.Clear();
         timer = 0;
-
-        /**************************
-        *仅供测试
-        *设置当日订单
-        */
-        List<string> list1 = new List<string>() { "牛奶", "椰子" };
-        today_menu.Add("椰椰奶奶", list1);
-        price.Add("椰椰奶奶", 5);
-
-        List<string> list2 = new List<string>() { "绿茶", "奥利奥" };
-        today_menu.Add("奥利给", list2);
-        price.Add("奥利给", 7);
-
-        List<string> list3 = new List<string>() { "红茶", "芋圆" };
-        today_menu.Add("芋芋症", list3);
-        price.Add("芋芋症", 5);
-
-        List<string> list4 = new List<string>() { "乌龙茶", "冰" };
-        today_menu.Add("雪豹闭嘴", list4);
-        price.Add("雪豹闭嘴", 6);
-
+   
         //总计时器
         InvokeRepeating("UpdateTimer", 0f, 1f);
 
+        //加载菜单，原料
+        LoadData();
+        
         //初始化位置状态
         for (int j = 0; j < 3; j++)
         {
             spawned.Add(false);
         }
-        final_status.Add("TodayIncome", 0);
     }
 
     // Update is called once per frame
@@ -78,7 +59,7 @@ public class Order : MonoBehaviour
             }
         }
         show_time.text = FormatTime(duration - timecalculater);
-        money.text = "收入:" + final_status["TodayIncome"];
+        money.text = "收入:" + today_income;
     }
     public string FormatTime(float seconds)
     {
@@ -145,7 +126,7 @@ public class Order : MonoBehaviour
     {
         Debug.Log("earn" + money);
         callGenerater.CupDestroyed(cup_pos);
-        final_status["TodayIncome"] += money;
+        today_income += money;
         spawned[pos] = false;
     }
     public void hasServed(int pos)
@@ -173,6 +154,7 @@ public class Order : MonoBehaviour
         timecalculater += 1f;
         if (timecalculater >= duration)
         {
+            Debug.Log("time is up");
             ActivateUI();
 
             /*******************
@@ -188,7 +170,7 @@ public class Order : MonoBehaviour
             }
 
 
-            uiElement.GetComponent<FinalResult>().showResult(final_status.ElementAt(0).Value);
+            uiElement.GetComponent<FinalResult>().showResult(today_income);
             timecalculater = 0f; // Reset timer if you want to reuse it
         }
     }

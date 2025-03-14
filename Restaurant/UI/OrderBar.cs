@@ -8,7 +8,7 @@ public class OrderBar : MonoBehaviour
     public List<TMP_Text> allTextMeshPros;
     public Customer custom;
     private List<string> order;
-    private bool flag = false;
+
     // Update is called once per frame
     void Start()
     {
