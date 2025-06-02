@@ -13,6 +13,7 @@ public class PlayerData
         PlotStage = cur_plotStage;
         cookData = new CookData();
     }
+    public List<int> remaining;
 }
 
 [System.Serializable]

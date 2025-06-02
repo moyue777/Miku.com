@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class OrderBar : MonoBehaviour
 {
     public List<TMP_Text> allTextMeshPros;
-    public Customer custom;
+    public CustomControl custom;
     private List<string> order;
 
     // Update is called once per frame
     void Start()
     {
-        custom = GetComponentInParent<Customer>();
+        custom = GetComponentInParent<CustomControl>();
         allTextMeshPros = new List<TMP_Text>(GetComponentsInChildren<TMP_Text>());
 
         if (custom == null)

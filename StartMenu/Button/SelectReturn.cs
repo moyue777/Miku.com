@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class SelectReturn : MonoBehaviour
 {
-    public Canvas LoadCanva;
-    public Canvas selfCanva;
     public void Onclick()
     {
-        selfCanva.gameObject.SetActive(false);
-        LoadCanva.gameObject.SetActive(true);
+        SuperController superController = SuperController.Instance;
+        if (superController != null)
+        {
+            Debug.Log("Save");
+            superController.CallSystem(true);
+        }
     }
 }

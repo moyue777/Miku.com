@@ -120,7 +120,7 @@ public class HealthControl : MonoBehaviour
         
         if (needQuit)
         {
-            Customer custom = gameObject.GetComponent<Customer>();
+            CustomControl custom = gameObject.GetComponent<CustomControl>();
             custom.Quit();  
         }
     }

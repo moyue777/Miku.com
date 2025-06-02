@@ -1,9 +1,17 @@
 using System.Collections.Generic;
+using System;
 /// <summary>
 /// 仅管理玩家的数据，调用静态加载工具
 /// </summary>
 public partial class SuperController
 {
+    /// <summary>
+    /// 设置玩家数据
+    /// </summary>
+    public void SetPlayerData(PlayerData playerData)
+    {
+        Instance.playerData = playerData;
+    }
     /// <summary>
     /// 加载指定栏位的数据
     /// </summary>
@@ -15,7 +23,7 @@ public partial class SuperController
         {
             Instance.playerData = new PlayerData();
         }
-        plotManager.UpdateList();    
+        plotManager.UpdateList();
     }
     
     /// <summary>
@@ -27,18 +35,8 @@ public partial class SuperController
         StaticSaveManager.SavePlayerData(Instance.playerData, currentSavePos);
     }
 
-    public List<bool> QueryData()
+    public Dictionary<string, DateTime> QueryData()
     {
-        List<bool> query_result = new List<bool>(3);
-        for (int i = 1; i <= 3; i++)
-        {
-            if (StaticSaveManager.IsSaveSlotAvailable(i))
-            {
-                query_result[i] = true;
-            }
-        }
-        return query_result;
+        return StaticSaveManager.GetFile_Times();
     }
-
-
 }

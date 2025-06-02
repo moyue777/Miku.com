@@ -11,12 +11,10 @@ public class StartUIManager : MonoBehaviour
     }
     public void Activate()
     {
-        Debug.Log("call for setactive(true)");
         canvas.gameObject.SetActive(true);
     }
     public void Deactivate()
     {
-        Debug.Log("call for deactivate");
         canvas.gameObject.SetActive(false);
     }
 

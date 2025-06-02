@@ -1,19 +1,26 @@
 using UnityEngine;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 public partial class SuperController : MonoBehaviour
 {
     public static SuperController Instance;
-    public Dictionary<string, GameObject> triggers_prefabs;//triggers预制体
-    public Dictionary<string, List<string>> triggers_locoation = new Dictionary<string, List<string>>();//triggers的位置
-
-    public PlayerData playerData;//玩家数据
-    
     public GameObject SelfObject;
+    [Header("Pause Canva")]
+    public GameObject pauseCanva;
+    public GameObject pauseCanva_system;
+    public GameObject pauseCanva_save;
+    [Header("Manage")]
+    public StartUIManager staticUIManage;
+    public PlotManager plotManager;
+    [Header("player information")]
+    public PlayerData playerData;//玩家数据
     public bool isTalking = false;
-    private Vector2 Target;
-     public PlotManager plotManager;
-    
+    [SerializeField]
+    private Condition condition = Condition.Day;
+    public Condition GetCondition()
+    {
+        return condition;
+    }
+
     public void SetTarget(Vector2 target)
     {
         vector3s.Add(target);
@@ -26,38 +33,26 @@ public partial class SuperController : MonoBehaviour
             DontDestroyOnLoad(SelfObject);
         }
         else
-        {
-            Destroy(SelfObject);
-        }
-
-        string location = "NPC_Talk/";
-        triggers_prefabs = new Dictionary<string, GameObject>()
-        {
-            {"male_man_character",Resources.Load<GameObject>(location + "male_man_character")},
-            {"female_main_character",Resources.Load<GameObject>(location + "female_main_character")},
-        };
-        triggers_locoation = new Dictionary<string, List<string>>()
-        {
-            {"HomeScene",new List<string>(){
-                "female_main_character",
-                }
-            },
-            {"StreetScene",new List<string>(){
-                "male_man_character",
-            }}
-        };
+        { Destroy(SelfObject); }
     }
-
     void Start()
     {
         plotManager = FindObjectOfType<PlotManager>();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        pauseCanva.SetActive(false);
     }
+    /// <summary>
+    /// 仅仅改变标志位
+    /// </summary>
+    /// <param name="Talking"></param>
     public void ChangeTalking(bool Talking)
     {
         isTalking = Talking;
     }
 
+    /// <summary>
+    /// 正确的trigger触发，SuperController结束
+    /// </summary>
     public void FinishTalk()
     {
         Debug.Log("before" + playerData.PlotStage);

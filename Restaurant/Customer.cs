@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 using TMPro; // 引入 TextMeshPro 命名空间
 
-public class Customer : MonoBehaviour
+public class CustomControl : MonoBehaviour
 {
     public Dictionary<string, bool> required_product = new Dictionary<string, bool>();//当前点单
     public List<string> ingredients = new List<string>();

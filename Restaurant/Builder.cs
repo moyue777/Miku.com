@@ -41,7 +41,7 @@ public class Builder : MonoBehaviour
                 if (collider.CompareTag("Customer")) // 顾客的标签是"Customer"
                 {
                     Debug.Log("find customer");
-                    Customer customer = collider.GetComponentInParent<Customer>();
+                    CustomControl customer = collider.GetComponentInParent<CustomControl>();
                     if (customer != null && customer.CheckStandby())
                     {
                         

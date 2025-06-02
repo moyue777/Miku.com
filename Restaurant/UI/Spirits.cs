@@ -4,7 +4,7 @@ using UnityEngine;
 public class Spirits : MonoBehaviour
 {
     private Slider slider; // 血条Slider组件
-    public HealthControl customer; // 敌人对象
+    public HealthControl customer; 
     
     void Start()
     {

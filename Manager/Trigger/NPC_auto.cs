@@ -18,7 +18,7 @@ public class NPC_auto : MyTrigger
     }
     override public void Update()
     {
-        if (!hasTriggered && touched && playerRigidbody != null && playerRigidbody.velocity.sqrMagnitude < 0.01f)
+        if (!hasTriggered && touched && playerRigidbody != null )
         {
             OnFKeyPressed();
             hasTriggered = true;

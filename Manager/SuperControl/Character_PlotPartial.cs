@@ -1,12 +1,8 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-public partial class PlotManager : MonoBehaviour
+public partial class PlotManager
 {
-    public Image current_character;
-    public AudioClip current_audioClip;
-    public float scaleFactor = 0.5f;
-
     public void LoadCharacter(string target_character)
     {
         Sprite target_sprite = Resources.Load<Sprite>("characters/" + target_character);

@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TestEnter : MonoBehaviour
 {
-    public ButtonManage buttonManage;  
-    public void Onclick()
+    public GameObject savePrefab;
+    public void OnClick()
     {
-        buttonManage.LoadGame(0);
+    //     SuperController superController = SuperController.Instance;
+    //     GameObject midSavePrefab = Instantiate(savePrefab,superController.transform);
+    //     midSavePrefab.GetComponent<SaveUIManager>().current_parent = gameObject;
     }
 }

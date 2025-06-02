@@ -1,13 +1,14 @@
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using System.Collections.Generic;
 
 public static class StaticSaveManager
 {
     public const string SaveFolder = "Saves";
     public const string SaveFileExtension = ".save";
     public const string SaveList = ".savelist";
-
     /// <summary>
     /// 返回文件保存的路径
     /// </summary>
@@ -15,9 +16,38 @@ public static class StaticSaveManager
     /// <returns></returns>
     private static string GetSavePath(int cursaveSlot)
     {
+        Debug.Log(Application.persistentDataPath);
         return Path.Combine(Application.persistentDataPath, SaveFolder, cursaveSlot + SaveFileExtension);
     }
-    
+
+    /// <summary>
+    /// 获取所有存档
+    /// </summary>
+    /// <returns></returns>
+    public static Dictionary<string, DateTime> GetFile_Times()
+{
+    string saveDir = Path.Combine(Application.persistentDataPath, SaveFolder);
+    Dictionary<string, DateTime> saveDict = new Dictionary<string, DateTime>();
+    Debug.Log(GetSavePath(0));
+
+    if (!Directory.Exists(saveDir))
+    {
+        Directory.CreateDirectory(saveDir); // 如果文件夹不存在，则创建
+    }
+
+    Debug.Log("getting all files");
+    string[] saveFiles = Directory.GetFiles(saveDir, "*" + SaveFileExtension);
+
+    foreach (var filePath in saveFiles)
+    {
+        string fileName = Path.GetFileName(filePath); // 获取带扩展名的文件名
+        DateTime lastWriteTime = File.GetLastWriteTime(filePath);
+        saveDict[fileName] = lastWriteTime;
+    }
+
+    return saveDict;
+}
+
     /// <summary>
     /// 保存当前数据
     /// </summary>
@@ -25,17 +55,18 @@ public static class StaticSaveManager
     /// <param name="saveSlot"></param>
     public static void SavePlayerData(PlayerData playerData, int saveSlot)
     {
-        if (IsSaveSlotAvailable(saveSlot))
+        string path = GetSavePath(saveSlot);
+
+        try
         {
-            string path = GetSavePath(saveSlot);
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(path);
-            bf.Serialize(file, playerData);
-            file.Close();
+            // 确保目录存在
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            string dataToSave = JsonUtility.ToJson(playerData, true); // true 表示格式化输出
+            File.WriteAllText(path, dataToSave);
         }
-        else
+        catch (System.Exception e)
         {
-            Debug.LogError("Save slot is already in use or save slots are full.");
+            Debug.LogError($"保存失败: {e.Message}");
         }
     }
 
@@ -47,13 +78,18 @@ public static class StaticSaveManager
     public static PlayerData LoadPlayerData(int saveSlot)
     {
         string path = GetSavePath(saveSlot);
+
         if (File.Exists(path))
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(path, FileMode.Open);
-            PlayerData playerData = (PlayerData)bf.Deserialize(file);
-            file.Close();
-            return playerData;
+            try
+            {
+                string json = File.ReadAllText(path);
+                return JsonUtility.FromJson<PlayerData>(json);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"加载失败: {e.Message}");
+            }
         }
         return null;
     }
@@ -71,19 +107,5 @@ public static class StaticSaveManager
         }
     }
 
-    /// <summary>
-    /// 检查存档是否存在
-    /// </summary>
-    /// <param name="saveSlot"></param>
-    /// <returns></returns>
-    public static bool IsSaveSlotAvailable(int saveSlot){
-        if ( File.Exists(GetSavePath(saveSlot)) )
-        {
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
 }
 

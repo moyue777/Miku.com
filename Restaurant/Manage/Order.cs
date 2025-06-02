@@ -80,7 +80,7 @@ public partial class Order : MonoBehaviour
                 spawned[i] = true;
 
                 GameObject current_custom = Instantiate(customer, spawnposes[i], Quaternion.identity);
-                Customer current_one = current_custom.GetComponent<Customer>();
+                CustomControl current_one = current_custom.GetComponent<CustomControl>();
 
                 //设置customer
                 if (current_one != null)
